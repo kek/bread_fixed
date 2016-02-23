@@ -1,17 +1,33 @@
 module BreadFixed (..) where
 
-import StartApp.Simple
+import StartApp
+import Effects exposing (Effects, Never)
+import Task exposing (Task)
 import Html exposing (text, Html, p)
 import Html.Events exposing (onClick)
 
 
 main : Signal Html
 main =
-  StartApp.Simple.start
+  app.html
+
+
+app =
+  StartApp.start
     { model = init
     , update = update
     , view = view
+    , inputs = []
     }
+
+
+port tasks : Signal (Task Never ())
+port tasks =
+  app.tasks
+
+
+
+-- MODEL
 
 
 type alias IsFixed =
@@ -22,9 +38,13 @@ type alias Model =
   IsFixed
 
 
-init : Model
+init : ( Model, Effects Action )
 init =
-  False
+  ( False, Effects.none )
+
+
+
+-- VIEW
 
 
 toYesNo : IsFixed -> String
@@ -46,11 +66,12 @@ view address model =
     [ text (toYesNo model) ]
 
 
-update : Action -> Model -> Model
+
+-- UPDATE
+
+
+update : Action -> Model -> ( Model, Effects Action )
 update action model =
   case model of
-    True ->
-      False
-
-    False ->
-      True
+    Toggle state ->
+      ( not model, Effects none )
