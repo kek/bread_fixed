@@ -14,7 +14,7 @@ main =
 
 app =
   StartApp.start
-    { model = init
+    { init = init
     , update = update
     , view = view
     , inputs = []
@@ -72,6 +72,6 @@ view address model =
 
 update : Action -> Model -> ( Model, Effects Action )
 update action model =
-  case model of
+  case action of
     Toggle state ->
-      ( not model, Effects none )
+      ( not model, Effects.none )
