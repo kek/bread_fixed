@@ -3,11 +3,12 @@ defmodule BreadFixed.Bread do
 
   schema "bread" do
     field :fixed, :boolean, default: false
+    field :name, :string
 
     timestamps
   end
 
-  @required_fields ~w(fixed)
+  @required_fields ~w(fixed name)
   @optional_fields ~w()
 
   @doc """

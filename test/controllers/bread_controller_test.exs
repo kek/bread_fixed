@@ -2,7 +2,7 @@ defmodule BreadFixed.BreadControllerTest do
   use BreadFixed.ConnCase
 
   alias BreadFixed.Bread
-  @valid_attrs %{fixed: true}
+  @valid_attrs %{fixed: true, name: "baguette"}
   @invalid_attrs %{}
 
   setup %{conn: conn} do
