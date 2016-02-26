@@ -2,13 +2,12 @@ defmodule BreadFixed.Bread do
   use BreadFixed.Web, :model
 
   schema "bread" do
-    field :fixed, :boolean, default: false
-    field :name, :string
+    field :fixed, :boolean, null: false
 
     timestamps
   end
 
-  @required_fields ~w(fixed name)
+  @required_fields ~w(fixed)
   @optional_fields ~w()
 
   @doc """

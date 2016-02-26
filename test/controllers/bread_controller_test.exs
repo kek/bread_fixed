@@ -2,7 +2,7 @@ defmodule BreadFixed.BreadControllerTest do
   use BreadFixed.ConnCase
 
   alias BreadFixed.Bread
-  @valid_attrs %{fixed: true, name: "baguette"}
+  @valid_attrs %{fixed: true}
   @invalid_attrs %{}
 
   setup %{conn: conn} do
@@ -15,7 +15,7 @@ defmodule BreadFixed.BreadControllerTest do
   end
 
   test "shows chosen resource", %{conn: conn} do
-    bread = Repo.insert! %Bread{}
+    bread = Repo.insert! %Bread{fixed: false}
     conn = get conn, bread_path(conn, :show, bread)
     assert json_response(conn, 200)["data"] == %{"id" => bread.id,
       "fixed" => bread.fixed}
@@ -39,20 +39,20 @@ defmodule BreadFixed.BreadControllerTest do
   end
 
   test "updates and renders chosen resource when data is valid", %{conn: conn} do
-    bread = Repo.insert! %Bread{}
+    bread = Repo.insert! %Bread{fixed: false}
     conn = put conn, bread_path(conn, :update, bread), bread: @valid_attrs
     assert json_response(conn, 200)["data"]["id"]
     assert Repo.get_by(Bread, @valid_attrs)
   end
 
   test "does not update chosen resource and renders errors when data is invalid", %{conn: conn} do
-    bread = Repo.insert! %Bread{}
+    bread = Repo.insert! %Bread{fixed: false}
     conn = put conn, bread_path(conn, :update, bread), bread: @invalid_attrs
     assert json_response(conn, 422)["errors"] != %{}
   end
 
   test "deletes chosen resource", %{conn: conn} do
-    bread = Repo.insert! %Bread{}
+    bread = Repo.insert! %Bread{fixed: false}
     conn = delete conn, bread_path(conn, :delete, bread)
     assert response(conn, 204)
     refute Repo.get(Bread, bread.id)

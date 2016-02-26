@@ -3,7 +3,7 @@ defmodule BreadFixed.BreadTest do
 
   alias BreadFixed.Bread
 
-  @valid_attrs %{fixed: true, name: "fooooooooooooooooooooooooools"}
+  @valid_attrs %{fixed: true}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

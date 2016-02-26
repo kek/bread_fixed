@@ -3,8 +3,7 @@ defmodule BreadFixed.Repo.Migrations.CreateBread do
 
   def change do
     create table(:bread) do
-      add :fixed, :boolean, default: false
-      add :name, :string
+      add :fixed, :boolean, null: false
 
       timestamps
     end
