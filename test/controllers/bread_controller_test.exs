@@ -47,7 +47,7 @@ defmodule BreadFixed.BreadControllerTest do
 
   test "does not update chosen resource and renders errors when data is invalid", %{conn: conn} do
     bread = Repo.insert! %Bread{fixed: false}
-    conn = put conn, bread_path(conn, :update, bread), bread: @invalid_attrs
+    conn = put conn, bread_path(conn, :update, bread), bread: %{fixed: "foo"}
     assert json_response(conn, 422)["errors"] != %{}
   end
 

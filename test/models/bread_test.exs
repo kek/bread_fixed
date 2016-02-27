@@ -4,7 +4,7 @@ defmodule BreadFixed.BreadTest do
   alias BreadFixed.Bread
 
   @valid_attrs %{fixed: true}
-  @invalid_attrs %{}
+  @invalid_attrs %{fixed: "foo"}
 
   test "changeset with valid attributes" do
     changeset = Bread.changeset(%Bread{}, @valid_attrs)
@@ -17,7 +17,7 @@ defmodule BreadFixed.BreadTest do
   end
 
   test "changeset with invalid attributes for existing record" do
-    bread = BreadFixed.Repo.insert!(%BreadFixed.Bread{fixed: false})
+    bread = BreadFixed.Repo.insert!(%BreadFixed.Bread{fixed: true})
     changeset = Bread.changeset(bread, @invalid_attrs)
     refute changeset.valid?
   end

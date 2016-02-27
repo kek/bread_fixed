@@ -34,14 +34,11 @@ defmodule BreadFixed.BreadController do
   def update(conn, %{"id" => id, "bread" => bread_params}) do
     bread = Repo.get!(Bread, id)
     changeset = Bread.changeset(bread, bread_params)
-    IO.inspect bread_params
 
     case Repo.update(changeset) do
       {:ok, bread} ->
-        IO.puts changeset.valid?
         render(conn, "show.json", bread: bread)
       {:error, changeset} ->
-        IO.puts "NOT OK"
         conn
         |> put_status(:unprocessable_entity)
         |> render(BreadFixed.ChangesetView, "error.json", changeset: changeset)
