@@ -5,6 +5,8 @@ import Effects exposing (Effects, Never)
 import Task exposing (Task)
 import Html exposing (text, Html, p)
 import Html.Events exposing (onClick)
+import Http
+import Json.Decode as Json exposing ((:=))
 
 
 main : Signal Html
@@ -40,7 +42,24 @@ type alias Model =
 
 init : ( Model, Effects Action )
 init =
-  ( False, Effects.none )
+  ( False, fetchBread )
+
+
+
+-- EFFECTS
+
+
+fetchBread : Effects Action
+fetchBread =
+  Http.get decodeBread "http://localhost:4000/api/bread/1"
+    |> Task.toMaybe
+    |> Task.map SetBread
+    |> Effects.task
+
+
+decodeBread : Json.Decoder Model
+decodeBread =
+  Json.at ["data", "fixed"] Json.bool
 
 
 
@@ -56,7 +75,7 @@ toYesNo isfixed =
 
 
 type Action
-  = Toggle Model
+  = Toggle Model | SetBread (Maybe Model)
 
 
 view : Signal.Address Action -> Model -> Html
@@ -75,3 +94,8 @@ update action model =
   case action of
     Toggle state ->
       ( not model, Effects.none )
+    SetBread bread ->
+      let
+        newModel = Maybe.withDefault model bread
+      in
+        (newModel, Effects.none)

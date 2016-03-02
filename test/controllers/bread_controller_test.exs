@@ -21,6 +21,14 @@ defmodule BreadFixed.BreadControllerTest do
       "fixed" => bread.fixed}
   end
 
+  # test "gets the latest entry", %{conn: conn} do
+  #   bread = Repo.insert! %Bread{fixed: false}
+  #   conn = get conn, bread_path(conn, :latest)
+  #   assert json_response(conn, 200)["data"] == %{"fixed" => false}
+  #   bread = Repo.insert! %Bread{fixed: true}
+  #   assert json_response(conn, 200)["data"] == %{"fixed" => true}
+  # end
+
   test "does not show resource and instead throw error when id is nonexistent", %{conn: conn} do
     assert_error_sent 404, fn ->
       get conn, bread_path(conn, :show, -1)
