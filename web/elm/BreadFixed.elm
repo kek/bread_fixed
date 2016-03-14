@@ -59,7 +59,7 @@ fetchBread =
 
 decodeBread : Json.Decoder Model
 decodeBread =
-  Json.at ["data", "fixed"] Json.bool
+  Json.at [ "data", "fixed" ] Json.bool
 
 
 
@@ -75,7 +75,8 @@ toYesNo isfixed =
 
 
 type Action
-  = Toggle Model | SetBread (Maybe Model)
+  = Toggle Model
+  | SetBread (Maybe Model)
 
 
 view : Signal.Address Action -> Model -> Html
@@ -94,8 +95,10 @@ update action model =
   case action of
     Toggle state ->
       ( not model, Effects.none )
+
     SetBread bread ->
       let
-        newModel = Maybe.withDefault model bread
+        newModel =
+          Maybe.withDefault model bread
       in
-        (newModel, Effects.none)
+        ( newModel, Effects.none )
