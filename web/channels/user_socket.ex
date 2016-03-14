@@ -4,6 +4,8 @@ defmodule BreadFixed.UserSocket do
   ## Channels
   # channel "rooms:*", BreadFixed.RoomChannel
 
+  channel "bread:fixed", BreadFixed.BreadChannel
+
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
   # transport :longpoll, Phoenix.Transports.LongPoll
