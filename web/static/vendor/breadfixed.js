@@ -10777,6 +10777,11 @@ Elm.BreadFixed.make = function (_elm) {
    $StartApp = Elm.StartApp.make(_elm),
    $Task = Elm.Task.make(_elm);
    var _op = {};
+   var fixed = Elm.Native.Port.make(_elm).inboundSignal("fixed",
+   "BreadFixed.Model",
+   function (v) {
+      return typeof v === "boolean" ? v : _U.badPort("a boolean (true or false)",v);
+   });
    var update = F2(function (action,model) {
       var _p0 = action;
       if (_p0.ctor === "Toggle") {
@@ -10794,7 +10799,7 @@ Elm.BreadFixed.make = function (_elm) {
    });
    var decodeBread = A2($Json$Decode.at,_U.list(["data","fixed"]),$Json$Decode.bool);
    var fetchBread = $Effects.task(A2($Task.map,SetBread,$Task.toMaybe(A2($Http.get,decodeBread,"http://localhost:4000/api/bread/1"))));
-   var init = {ctor: "_Tuple2",_0: false,_1: fetchBread};
+   var init = {ctor: "_Tuple2",_0: false,_1: $Effects.none};
    var app = $StartApp.start({init: init,update: update,view: view,inputs: _U.list([])});
    var tasks = Elm.Native.Task.make(_elm).performSignal("tasks",app.tasks);
    var main = app.html;

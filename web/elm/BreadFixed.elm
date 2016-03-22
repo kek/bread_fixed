@@ -19,7 +19,7 @@ app =
     { init = init
     , update = update
     , view = view
-    , inputs = []
+    , inputs = [incomingActions]
     }
 
 
@@ -42,7 +42,7 @@ type alias Model =
 
 init : ( Model, Effects Action )
 init =
-  ( False, fetchBread )
+  ( False, Effects.none )
 
 
 
@@ -97,8 +97,20 @@ update action model =
       ( not model, Effects.none )
 
     SetBread bread ->
-      let
-        newModel =
-          Maybe.withDefault model bread
-      in
-        ( newModel, Effects.none )
+      (bread, Effects.none)
+      -- let
+      --   newModel =
+      --     Maybe.withDefault model bread
+      -- in
+      --   ( newModel, Effects.none )
+
+
+
+-- SIGNALS
+
+
+port fixed : Signal Model
+
+incomingActions: Signal Action
+incomingActions =
+  Signal.map SetBread fixed

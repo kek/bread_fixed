@@ -20,5 +20,17 @@ import "phoenix_html";
 
 import socket from "./socket";
 
-var elmDiv = document.getElementById('elm-main')
-  , elmApp = Elm.embed(Elm.BreadFixed, elmDiv);
+var elmDiv = document.getElementById('elm-main'),
+    initialState = {fixed: false},
+    elmApp = Elm.embed(Elm.BreadFixed, elmDiv, initialState);
+
+// Now that you are connected, you can join channels with a topic:
+let channel = socket.channel("bread:fixed", {});
+channel.join()
+  .receive("ok", resp => { console.log("Joined successfully", resp); })
+  .receive("error", resp => { console.log("Unable to join", resp); });
+
+channel.on("set_bread", data => {
+  console.log("got bread", data.bread);
+  elmApp.ports.fixed.send(data.bread.fixed);
+});
