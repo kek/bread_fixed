@@ -2,8 +2,11 @@ defmodule BreadFixed.BreadChannelTest do
   use BreadFixed.ChannelCase
 
   alias BreadFixed.BreadChannel
+  alias BreadFixed.Bread
 
   setup do
+    Repo.insert Bread.changeset(%Bread{fixed: true})
+
     {:ok, _, socket} =
       socket("user_id", %{some: :assign})
       |> subscribe_and_join(BreadChannel, "bread:fixed")

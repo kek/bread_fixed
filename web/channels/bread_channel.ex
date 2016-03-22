@@ -1,8 +1,10 @@
 defmodule BreadFixed.BreadChannel do
   use BreadFixed.Web, :channel
+  alias BreadFixed.Bread
 
   def join("bread:fixed", payload, socket) do
     if authorized?(payload) do
+      send self(), :after_join
       {:ok, socket}
     else
       {:error, %{reason: "unauthorized"}}
@@ -33,5 +35,14 @@ defmodule BreadFixed.BreadChannel do
   # Add authorization logic here as required.
   defp authorized?(_payload) do
     true
+  end
+
+  def handle_info(:after_join, socket) do
+    breads = Repo.all(Bread)
+
+    if Enum.count(breads) > 0 do
+      push socket, "set_bread", %{bread: hd(breads)}
+    end
+    {:noreply, socket}
   end
 end

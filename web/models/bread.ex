@@ -21,3 +21,9 @@ defmodule BreadFixed.Bread do
     |> cast(params, @required_fields, @optional_fields)
   end
 end
+
+defimpl Poison.Encoder, for: BreadFixed.Bread do
+  def encode(model, opts) do
+    Poison.Encoder.encode(%{fixed: model.fixed()}, opts)
+  end
+end
