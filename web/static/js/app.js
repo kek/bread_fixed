@@ -34,3 +34,8 @@ channel.on("set_bread", data => {
   console.log("got bread", data.bread);
   elmApp.ports.fixed.send(data.bread.fixed);
 });
+
+// listen for seat requests
+elmApp.ports.breadRequests.subscribe(bread => {
+  console.log(bread);
+})

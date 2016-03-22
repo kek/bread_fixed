@@ -19,7 +19,7 @@ app =
     { init = init
     , update = update
     , view = view
-    , inputs = [incomingActions]
+    , inputs = [ incomingActions ]
     }
 
 
@@ -49,17 +49,17 @@ init =
 -- EFFECTS
 
 
-fetchBread : Effects Action
-fetchBread =
-  Http.get decodeBread "http://localhost:4000/api/bread/1"
-    |> Task.toMaybe
-    |> Task.map SetBread
-    |> Effects.task
+-- fetchBread : Effects Action
+-- fetchBread =
+--   Http.get decodeBread "http://localhost:4000/api/bread/1"
+--     |> Task.toMaybe
+--     |> Task.map SetBread
+--     |> Effects.task
 
 
-decodeBread : Json.Decoder Model
-decodeBread =
-  Json.at [ "data", "fixed" ] Json.bool
+-- decodeBread : Json.Decoder Model
+-- decodeBread =
+--   Json.at [ "data", "fixed" ] Json.bool
 
 
 
@@ -76,7 +76,7 @@ toYesNo isfixed =
 
 type Action
   = Toggle Model
-  | SetBread (Maybe Model)
+  | SetBread Model
 
 
 view : Signal.Address Action -> Model -> Html
@@ -93,24 +93,35 @@ view address model =
 update : Action -> Model -> ( Model, Effects Action )
 update action model =
   case action of
-    Toggle state ->
+    Toggle _ ->
       ( not model, Effects.none )
 
-    SetBread bread ->
-      (bread, Effects.none)
-      -- let
-      --   newModel =
-      --     Maybe.withDefault model bread
-      -- in
-      --   ( newModel, Effects.none )
+    SetBread isFixed ->
+      ( isFixed, Effects.none )
 
+
+
+-- let
+--   newModel =
+--     Maybe.withDefault model bread
+-- in
+--   ( newModel, Effects.none )
 
 
 -- SIGNALS
 
 
 port fixed : Signal Model
-
-incomingActions: Signal Action
+incomingActions : Signal Action
 incomingActions =
   Signal.map SetBread fixed
+
+
+breadRequestsBox : Signal.Mailbox IsFixed
+breadRequestsBox =
+  Signal.mailbox False
+
+
+port breadRequests : Signal IsFixed
+port breadRequests =
+  breadRequestsBox.signal

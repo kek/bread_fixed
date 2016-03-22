@@ -10768,8 +10768,6 @@ Elm.BreadFixed.make = function (_elm) {
    $Effects = Elm.Effects.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Events = Elm.Html.Events.make(_elm),
-   $Http = Elm.Http.make(_elm),
-   $Json$Decode = Elm.Json.Decode.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
@@ -10777,6 +10775,8 @@ Elm.BreadFixed.make = function (_elm) {
    $StartApp = Elm.StartApp.make(_elm),
    $Task = Elm.Task.make(_elm);
    var _op = {};
+   var breadRequestsBox = $Signal.mailbox(false);
+   var breadRequests = Elm.Native.Port.make(_elm).outboundSignal("breadRequests",function (v) {    return v;},breadRequestsBox.signal);
    var fixed = Elm.Native.Port.make(_elm).inboundSignal("fixed",
    "BreadFixed.Model",
    function (v) {
@@ -10787,31 +10787,29 @@ Elm.BreadFixed.make = function (_elm) {
       if (_p0.ctor === "Toggle") {
             return {ctor: "_Tuple2",_0: $Basics.not(model),_1: $Effects.none};
          } else {
-            var newModel = A2($Maybe.withDefault,model,_p0._0);
-            return {ctor: "_Tuple2",_0: newModel,_1: $Effects.none};
+            return {ctor: "_Tuple2",_0: _p0._0,_1: $Effects.none};
          }
    });
    var SetBread = function (a) {    return {ctor: "SetBread",_0: a};};
+   var incomingActions = A2($Signal.map,SetBread,fixed);
    var Toggle = function (a) {    return {ctor: "Toggle",_0: a};};
    var toYesNo = function (isfixed) {    return isfixed ? "Yes" : "No";};
    var view = F2(function (address,model) {
       return A2($Html.p,_U.list([A2($Html$Events.onClick,address,Toggle(model))]),_U.list([$Html.text(toYesNo(model))]));
    });
-   var decodeBread = A2($Json$Decode.at,_U.list(["data","fixed"]),$Json$Decode.bool);
-   var fetchBread = $Effects.task(A2($Task.map,SetBread,$Task.toMaybe(A2($Http.get,decodeBread,"http://localhost:4000/api/bread/1"))));
    var init = {ctor: "_Tuple2",_0: false,_1: $Effects.none};
-   var app = $StartApp.start({init: init,update: update,view: view,inputs: _U.list([])});
+   var app = $StartApp.start({init: init,update: update,view: view,inputs: _U.list([incomingActions])});
    var tasks = Elm.Native.Task.make(_elm).performSignal("tasks",app.tasks);
    var main = app.html;
    return _elm.BreadFixed.values = {_op: _op
                                    ,main: main
                                    ,app: app
                                    ,init: init
-                                   ,fetchBread: fetchBread
-                                   ,decodeBread: decodeBread
                                    ,toYesNo: toYesNo
                                    ,Toggle: Toggle
                                    ,SetBread: SetBread
                                    ,view: view
-                                   ,update: update};
+                                   ,update: update
+                                   ,incomingActions: incomingActions
+                                   ,breadRequestsBox: breadRequestsBox};
 };
