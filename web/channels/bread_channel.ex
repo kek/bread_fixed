@@ -11,6 +11,20 @@ defmodule BreadFixed.BreadChannel do
     end
   end
 
+  def handle_in("request_bread", payload, socket) do
+    bread = Repo.get!(Bread, 1)
+    params = %{fixed: true}
+    changeset = Bread.changeset(bread, params)
+
+    case Repo.update(changeset) do
+      {:ok, _seat} ->
+        broadcast socket, "bread_updated", bread
+        {:noreply, socket}
+      {:error, _changeset} ->
+        {:reply, {:error, "Something went wrong."}, socket}
+    end
+  end
+
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
   def handle_in("ping", payload, socket) do

@@ -21,7 +21,10 @@ import "phoenix_html";
 import socket from "./socket";
 
 var elmDiv = document.getElementById('elm-main'),
-    initialState = {fixed: false},
+    initialState = {
+      fixed: false,
+      breadUpdates: false
+    },
     elmApp = Elm.embed(Elm.BreadFixed, elmDiv, initialState);
 
 // Now that you are connected, you can join channels with a topic:
@@ -38,4 +41,16 @@ channel.on("set_bread", data => {
 // listen for seat requests
 elmApp.ports.breadRequests.subscribe(bread => {
   console.log(bread);
-})
+  channel.push("request_bread", bread);
+});
+
+elmApp.ports.breadRequests.subscribe(bread => {
+  // console.log("requesting bread: ", bread);
+  channel.push("request_bread", bread)
+    .receive("error", payload => console.log(payload.message));
+});
+
+channel.on("bread_updated", bread => {
+  console.log('updated bread: ', bread);
+  elmApp.ports.breadUpdates.send(bread["fixed"]);
+});

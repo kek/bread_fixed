@@ -10775,6 +10775,11 @@ Elm.BreadFixed.make = function (_elm) {
    $StartApp = Elm.StartApp.make(_elm),
    $Task = Elm.Task.make(_elm);
    var _op = {};
+   var breadUpdates = Elm.Native.Port.make(_elm).inboundSignal("breadUpdates",
+   "BreadFixed.IsFixed",
+   function (v) {
+      return typeof v === "boolean" ? v : _U.badPort("a boolean (true or false)",v);
+   });
    var breadRequestsBox = $Signal.mailbox(false);
    var breadRequests = Elm.Native.Port.make(_elm).outboundSignal("breadRequests",function (v) {    return v;},breadRequestsBox.signal);
    var fixed = Elm.Native.Port.make(_elm).inboundSignal("fixed",
@@ -10782,17 +10787,20 @@ Elm.BreadFixed.make = function (_elm) {
    function (v) {
       return typeof v === "boolean" ? v : _U.badPort("a boolean (true or false)",v);
    });
+   var NoOp = {ctor: "NoOp"};
+   var sendBreadRequest = function (x) {    return A2($Effects.map,$Basics.always(NoOp),$Effects.task(A2($Signal.send,breadRequestsBox.address,x)));};
    var update = F2(function (action,model) {
       var _p0 = action;
-      if (_p0.ctor === "Toggle") {
-            return {ctor: "_Tuple2",_0: $Basics.not(model),_1: $Effects.none};
-         } else {
-            return {ctor: "_Tuple2",_0: _p0._0,_1: $Effects.none};
-         }
+      switch (_p0.ctor)
+      {case "Toggle": return {ctor: "_Tuple2",_0: $Basics.not(model),_1: sendBreadRequest(_p0._0)};
+         case "SetBread": return {ctor: "_Tuple2",_0: _p0._0,_1: $Effects.none};
+         default: return {ctor: "_Tuple2",_0: model,_1: $Effects.none};}
    });
    var SetBread = function (a) {    return {ctor: "SetBread",_0: a};};
-   var incomingActions = A2($Signal.map,SetBread,fixed);
+   var isFixedToSet = A2($Signal.map,SetBread,fixed);
    var Toggle = function (a) {    return {ctor: "Toggle",_0: a};};
+   var breadsToUpdate = A2($Signal.map,Toggle,breadUpdates);
+   var incomingActions = A2($Signal.merge,isFixedToSet,breadsToUpdate);
    var toYesNo = function (isfixed) {    return isfixed ? "Yes" : "No";};
    var view = F2(function (address,model) {
       return A2($Html.p,_U.list([A2($Html$Events.onClick,address,Toggle(model))]),_U.list([$Html.text(toYesNo(model))]));
@@ -10808,8 +10816,12 @@ Elm.BreadFixed.make = function (_elm) {
                                    ,toYesNo: toYesNo
                                    ,Toggle: Toggle
                                    ,SetBread: SetBread
+                                   ,NoOp: NoOp
                                    ,view: view
                                    ,update: update
+                                   ,breadRequestsBox: breadRequestsBox
+                                   ,isFixedToSet: isFixedToSet
+                                   ,breadsToUpdate: breadsToUpdate
                                    ,incomingActions: incomingActions
-                                   ,breadRequestsBox: breadRequestsBox};
+                                   ,sendBreadRequest: sendBreadRequest};
 };
