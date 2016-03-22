@@ -34,18 +34,12 @@ channel.join()
   .receive("error", resp => { console.log("Unable to join", resp); });
 
 channel.on("set_bread", data => {
-  console.log("got bread", data.bread);
+  console.log("got bread", data);
   elmApp.ports.fixed.send(data.bread.fixed);
 });
 
-// listen for seat requests
 elmApp.ports.breadRequests.subscribe(bread => {
-  console.log(bread);
-  channel.push("request_bread", bread);
-});
-
-elmApp.ports.breadRequests.subscribe(bread => {
-  // console.log("requesting bread: ", bread);
+  console.log("requesting bread: ", bread);
   channel.push("request_bread", bread)
     .receive("error", payload => console.log(payload.message));
 });

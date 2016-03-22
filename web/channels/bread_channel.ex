@@ -13,12 +13,12 @@ defmodule BreadFixed.BreadChannel do
 
   def handle_in("request_bread", payload, socket) do
     bread = Repo.get!(Bread, 1)
-    params = %{fixed: true}
+    params = %{fixed: payload}
     changeset = Bread.changeset(bread, params)
 
     case Repo.update(changeset) do
-      {:ok, _seat} ->
-        broadcast socket, "bread_updated", bread
+      {:ok, bread} ->
+        broadcast socket, "set_bread", bread
         {:noreply, socket}
       {:error, _changeset} ->
         {:reply, {:error, "Something went wrong."}, socket}

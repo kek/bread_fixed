@@ -10792,18 +10792,18 @@ Elm.BreadFixed.make = function (_elm) {
    var update = F2(function (action,model) {
       var _p0 = action;
       switch (_p0.ctor)
-      {case "Toggle": return {ctor: "_Tuple2",_0: $Basics.not(model),_1: sendBreadRequest(_p0._0)};
+      {case "RequestBread": return {ctor: "_Tuple2",_0: model,_1: sendBreadRequest(_p0._0)};
          case "SetBread": return {ctor: "_Tuple2",_0: _p0._0,_1: $Effects.none};
          default: return {ctor: "_Tuple2",_0: model,_1: $Effects.none};}
    });
    var SetBread = function (a) {    return {ctor: "SetBread",_0: a};};
-   var isFixedToSet = A2($Signal.map,SetBread,fixed);
-   var Toggle = function (a) {    return {ctor: "Toggle",_0: a};};
-   var breadsToUpdate = A2($Signal.map,Toggle,breadUpdates);
-   var incomingActions = A2($Signal.merge,isFixedToSet,breadsToUpdate);
+   var changeFixed = A2($Signal.map,SetBread,fixed);
+   var RequestBread = function (a) {    return {ctor: "RequestBread",_0: a};};
+   var breadsToUpdate = A2($Signal.map,RequestBread,breadUpdates);
+   var incomingActions = A2($Signal.merge,changeFixed,breadsToUpdate);
    var toYesNo = function (isfixed) {    return isfixed ? "Yes" : "No";};
    var view = F2(function (address,model) {
-      return A2($Html.p,_U.list([A2($Html$Events.onClick,address,Toggle(model))]),_U.list([$Html.text(toYesNo(model))]));
+      return A2($Html.p,_U.list([A2($Html$Events.onClick,address,RequestBread(model))]),_U.list([$Html.text(toYesNo(model))]));
    });
    var init = {ctor: "_Tuple2",_0: false,_1: $Effects.none};
    var app = $StartApp.start({init: init,update: update,view: view,inputs: _U.list([incomingActions])});
@@ -10814,13 +10814,13 @@ Elm.BreadFixed.make = function (_elm) {
                                    ,app: app
                                    ,init: init
                                    ,toYesNo: toYesNo
-                                   ,Toggle: Toggle
+                                   ,RequestBread: RequestBread
                                    ,SetBread: SetBread
                                    ,NoOp: NoOp
                                    ,view: view
                                    ,update: update
                                    ,breadRequestsBox: breadRequestsBox
-                                   ,isFixedToSet: isFixedToSet
+                                   ,changeFixed: changeFixed
                                    ,breadsToUpdate: breadsToUpdate
                                    ,incomingActions: incomingActions
                                    ,sendBreadRequest: sendBreadRequest};
