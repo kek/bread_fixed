@@ -10788,7 +10788,7 @@ Elm.BreadFixed.make = function (_elm) {
       return typeof v === "boolean" ? v : _U.badPort("a boolean (true or false)",v);
    });
    var NoOp = {ctor: "NoOp"};
-   var sendBreadRequest = function (x) {    return A2($Effects.map,$Basics.always(NoOp),$Effects.task(A2($Signal.send,breadRequestsBox.address,x)));};
+   var sendBreadRequest = function (bread) {    return A2($Effects.map,$Basics.always(NoOp),$Effects.task(A2($Signal.send,breadRequestsBox.address,bread)));};
    var update = F2(function (action,model) {
       var _p0 = action;
       switch (_p0.ctor)

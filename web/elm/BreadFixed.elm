@@ -81,8 +81,8 @@ view address model =
 update : Action -> Model -> ( Model, Effects Action )
 update action model =
   case action of
-    RequestBread x ->
-      ( model, sendBreadRequest x )
+    RequestBread bread ->
+      ( model, sendBreadRequest bread )
 
     SetBread isFixed ->
       ( isFixed, Effects.none )
@@ -122,7 +122,7 @@ incomingActions =
 
 
 sendBreadRequest : IsFixed -> Effects Action
-sendBreadRequest x =
-  Signal.send breadRequestsBox.address x
+sendBreadRequest bread =
+  Signal.send breadRequestsBox.address bread
     |> Effects.task
     |> Effects.map (always NoOp)

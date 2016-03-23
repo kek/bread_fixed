@@ -2,6 +2,8 @@ defmodule BreadFixed.BreadChannel do
   use BreadFixed.Web, :channel
   alias BreadFixed.Bread
 
+  require Logger
+
   def join("bread:fixed", payload, socket) do
     if authorized?(payload) do
       send self(), :after_join
@@ -13,15 +15,25 @@ defmodule BreadFixed.BreadChannel do
 
   def handle_in("request_bread", payload, socket) do
     bread = Repo.get!(Bread, 1)
-    params = %{fixed: payload}
+    new_value = case payload do
+                  true -> false
+                  %{} -> true
+    end
+    params = %{fixed: new_value}
     changeset = Bread.changeset(bread, params)
+
+    Logger.debug inspect {"bread", bread}
+    Logger.debug inspect {"payload", payload}
+    Logger.debug inspect {"params", params}
+    Logger.debug inspect {"changeset", changeset}
+    # {:noreply, socket}
 
     case Repo.update(changeset) do
       {:ok, bread} ->
         broadcast socket, "set_bread", bread
         {:noreply, socket}
-      {:error, _changeset} ->
-        {:reply, {:error, "Something went wrong."}, socket}
+      {:error, changeset} ->
+        {:reply, {:error, changeset}, socket}
     end
   end
 
@@ -55,7 +67,8 @@ defmodule BreadFixed.BreadChannel do
     breads = Repo.all(Bread)
 
     if Enum.count(breads) > 0 do
-      push socket, "set_bread", %{bread: hd(breads)}
+      bread = hd(breads)
+      push socket, "set_bread", bread
     end
     {:noreply, socket}
   end

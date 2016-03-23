@@ -35,7 +35,7 @@ channel.join()
 
 channel.on("set_bread", data => {
   console.log("got bread", data);
-  elmApp.ports.fixed.send(data.bread.fixed);
+  elmApp.ports.fixed.send(data["fixed"]);
 });
 
 elmApp.ports.breadRequests.subscribe(bread => {
