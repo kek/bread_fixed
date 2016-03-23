@@ -1,0 +1,68 @@
+Elm.BreadFixed = Elm.BreadFixed || {};
+Elm.BreadFixed.make = function (_elm) {
+   "use strict";
+   _elm.BreadFixed = _elm.BreadFixed || {};
+   if (_elm.BreadFixed.values) return _elm.BreadFixed.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $StartApp = Elm.StartApp.make(_elm),
+   $Task = Elm.Task.make(_elm);
+   var _op = {};
+   var breadUpdates = Elm.Native.Port.make(_elm).inboundSignal("breadUpdates",
+   "BreadFixed.IsFixed",
+   function (v) {
+      return typeof v === "boolean" ? v : _U.badPort("a boolean (true or false)",v);
+   });
+   var breadRequestsBox = $Signal.mailbox(false);
+   var breadRequests = Elm.Native.Port.make(_elm).outboundSignal("breadRequests",function (v) {    return v;},breadRequestsBox.signal);
+   var fixed = Elm.Native.Port.make(_elm).inboundSignal("fixed",
+   "BreadFixed.Model",
+   function (v) {
+      return typeof v === "boolean" ? v : _U.badPort("a boolean (true or false)",v);
+   });
+   var NoOp = {ctor: "NoOp"};
+   var sendBreadRequest = function (bread) {    return A2($Effects.map,$Basics.always(NoOp),$Effects.task(A2($Signal.send,breadRequestsBox.address,bread)));};
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      switch (_p0.ctor)
+      {case "RequestBread": return {ctor: "_Tuple2",_0: model,_1: sendBreadRequest(_p0._0)};
+         case "SetBread": return {ctor: "_Tuple2",_0: _p0._0,_1: $Effects.none};
+         default: return {ctor: "_Tuple2",_0: model,_1: $Effects.none};}
+   });
+   var SetBread = function (a) {    return {ctor: "SetBread",_0: a};};
+   var changeFixed = A2($Signal.map,SetBread,fixed);
+   var RequestBread = function (a) {    return {ctor: "RequestBread",_0: a};};
+   var breadsToUpdate = A2($Signal.map,RequestBread,breadUpdates);
+   var incomingActions = A2($Signal.merge,changeFixed,breadsToUpdate);
+   var toYesNo = function (isfixed) {    return isfixed ? "Yes" : "No";};
+   var view = F2(function (address,model) {
+      return A2($Html.p,_U.list([A2($Html$Events.onClick,address,RequestBread(model))]),_U.list([$Html.text(toYesNo(model))]));
+   });
+   var init = {ctor: "_Tuple2",_0: false,_1: $Effects.none};
+   var app = $StartApp.start({init: init,update: update,view: view,inputs: _U.list([incomingActions])});
+   var tasks = Elm.Native.Task.make(_elm).performSignal("tasks",app.tasks);
+   var main = app.html;
+   return _elm.BreadFixed.values = {_op: _op
+                                   ,main: main
+                                   ,app: app
+                                   ,init: init
+                                   ,toYesNo: toYesNo
+                                   ,RequestBread: RequestBread
+                                   ,SetBread: SetBread
+                                   ,NoOp: NoOp
+                                   ,view: view
+                                   ,update: update
+                                   ,breadRequestsBox: breadRequestsBox
+                                   ,changeFixed: changeFixed
+                                   ,breadsToUpdate: breadsToUpdate
+                                   ,incomingActions: incomingActions
+                                   ,sendBreadRequest: sendBreadRequest};
+};
