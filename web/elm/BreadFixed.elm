@@ -47,7 +47,6 @@ init =
 
 
 
--- EFFECTS
 -- VIEW
 
 
