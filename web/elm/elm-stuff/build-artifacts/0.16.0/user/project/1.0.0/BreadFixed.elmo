@@ -43,7 +43,7 @@ Elm.BreadFixed.make = function (_elm) {
    var RequestBread = function (a) {    return {ctor: "RequestBread",_0: a};};
    var breadsToUpdate = A2($Signal.map,RequestBread,breadUpdates);
    var incomingActions = A2($Signal.merge,changeFixed,breadsToUpdate);
-   var toYesNo = function (isfixed) {    return isfixed ? "Yes" : "No";};
+   var toYesNo = function (isfixed) {    return isfixed ? "Ja" : "Nej";};
    var view = F2(function (address,model) {
       return A2($Html.button,
       _U.list([$Html$Attributes.$class("yes-or-no"),A2($Html$Events.onClick,address,RequestBread(model))]),

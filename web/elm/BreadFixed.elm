@@ -53,9 +53,9 @@ init =
 toYesNo : IsFixed -> String
 toYesNo isfixed =
   if isfixed then
-    "Yes"
+    "Ja"
   else
-    "No"
+    "Nej"
 
 
 type Action
