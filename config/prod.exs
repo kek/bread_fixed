@@ -66,5 +66,5 @@ config :logger, level: :info
 import_config "prod.secret.exs"
 
 config :quantum, cron: [
-  "@daily": {BreadFixed.Reset, :run}
+  "5 19 * * *": {BreadFixed.Reset, :run}
 ]
