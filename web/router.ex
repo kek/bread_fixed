@@ -18,15 +18,4 @@ defmodule BreadFixed.Router do
 
     get "/", PageController, :index
   end
-
-  scope "/api", BreadFixed do
-    pipe_through :api
-
-    resources "/bread", BreadController, except: [:new, :edit]
-  end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", BreadFixed do
-  #   pipe_through :api
-  # end
 end
