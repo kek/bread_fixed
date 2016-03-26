@@ -13,7 +13,7 @@ use Mix.Config
 # which you typically run after static files are built.
 config :bread_fixed, BreadFixed.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [host: "bread-fixed.karleklund.se", port: 80],
+  url: [host: "bread-fixed.tk", port: 80],
   cache_static_manifest: "priv/static/manifest.json",
   server: true
 
