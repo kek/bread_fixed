@@ -19,7 +19,7 @@ defmodule BreadFixed.Mixfile do
   def application do
     [mod: {BreadFixed, []},
      applications: [:phoenix, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex]]
+                    :phoenix_ecto, :postgrex, :mix_test_watch]]
   end
 
   # Specifies which paths to compile per environment.
@@ -37,7 +37,9 @@ defmodule BreadFixed.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.9"},
      {:cowboy, "~> 1.0"},
-     {:mix_test_watch, "~> 0.2"}]
+     {:mix_test_watch, "~> 0.2"},
+     {:exrm, "~> 1.0.0-rc7"},
+    ]
   end
 
   # Aliases are shortcut or tasks specific to the current project.
