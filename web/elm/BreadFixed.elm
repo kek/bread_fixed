@@ -3,8 +3,9 @@ module BreadFixed (..) where
 import StartApp
 import Effects exposing (Effects, Never)
 import Task exposing (Task)
-import Html exposing (text, Html, p)
+import Html exposing (text, Html, p, button)
 import Html.Events exposing (onClick)
+import Html.Attributes exposing (class, name, value)
 import Http
 import Json.Decode as Json exposing ((:=))
 
@@ -66,8 +67,9 @@ type Action
 
 view : Signal.Address Action -> Model -> Html
 view address model =
-  p
-    [ onClick address (RequestBread model) ]
+  button
+    [ class "yes-or-no"
+    , onClick address (RequestBread model) ]
     [ text (toYesNo model) ]
 
 

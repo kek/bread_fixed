@@ -76,3 +76,10 @@ form.link, form.button {
     border-bottom: 0;
   }
 }
+
+.yes-or-no {
+  font-size: 100px;
+  font-family: helvetica;
+  width: 100%;
+  height: 100%;
+}
