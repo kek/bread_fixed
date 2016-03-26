@@ -47,9 +47,6 @@ init =
 
 
 -- EFFECTS
-
-
-
 -- VIEW
 
 
@@ -103,9 +100,10 @@ port breadRequests =
 
 
 port breadUpdates : Signal IsFixed
-
 changeFixed : Signal Action
-changeFixed = Signal.map SetBread fixed
+changeFixed =
+  Signal.map SetBread fixed
+
 
 breadsToUpdate : Signal Action
 breadsToUpdate =
