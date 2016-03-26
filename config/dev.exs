@@ -42,5 +42,5 @@ config :bread_fixed, BreadFixed.Repo,
   pool_size: 10
 
 config :quantum, cron: [
-  "* * * * *": &BreadFixed.reset/0
+  "* * * * *": {BreadFixed.Reset, :run}
 ]

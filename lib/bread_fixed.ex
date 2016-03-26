@@ -27,8 +27,4 @@ defmodule BreadFixed do
     BreadFixed.Endpoint.config_change(changed, removed)
     :ok
   end
-
-  def reset do
-    BreadFixed.Endpoint.broadcast! "bread:fixed", "set_bread", %{fixed: false}
-  end
 end
