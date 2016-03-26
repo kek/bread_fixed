@@ -9,6 +9,7 @@
 
     <title>is it fixed?</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <link rel="icon" href="<%= static_path(@conn, "/favicon.png") %>" type="image/png" />
   </head>
 
   <body>
