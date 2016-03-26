@@ -38,7 +38,7 @@ defmodule BreadFixed.Mixfile do
      {:gettext, "~> 0.9"},
      {:cowboy, "~> 1.0"},
      {:mix_test_watch, "~> 0.2"},
-     {:exrm, "~> 1.0.0-rc7"},
+     {:exrm, "~> 1.0.0-rc7"}
     ]
   end
 

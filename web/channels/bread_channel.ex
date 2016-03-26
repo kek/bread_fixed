@@ -16,7 +16,7 @@ defmodule BreadFixed.BreadChannel do
   def handle_in("request_bread", payload, socket) do
     bread = Repo.get!(Bread, 1)
     new_value = case payload do
-                  true -> false
+                  true -> true
                   %{} -> true
     end
     params = %{fixed: new_value}
@@ -26,7 +26,6 @@ defmodule BreadFixed.BreadChannel do
     Logger.debug inspect {"payload", payload}
     Logger.debug inspect {"params", params}
     Logger.debug inspect {"changeset", changeset}
-    # {:noreply, socket}
 
     case Repo.update(changeset) do
       {:ok, bread} ->
