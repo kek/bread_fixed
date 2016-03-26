@@ -40,3 +40,7 @@ config :bread_fixed, BreadFixed.Repo,
   database: "bread_fixed_dev",
   hostname: "localhost",
   pool_size: 10
+
+config :quantum, cron: [
+  "* * * * *": &BreadFixed.reset/0
+]

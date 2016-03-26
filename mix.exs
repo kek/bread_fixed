@@ -19,7 +19,7 @@ defmodule BreadFixed.Mixfile do
   def application do
     [mod: {BreadFixed, []},
      applications: [:phoenix, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :mix_test_watch]]
+                    :phoenix_ecto, :postgrex, :quantum]]
   end
 
   # Specifies which paths to compile per environment.
@@ -38,7 +38,8 @@ defmodule BreadFixed.Mixfile do
      {:gettext, "~> 0.9"},
      {:cowboy, "~> 1.0"},
      {:mix_test_watch, "~> 0.2"},
-     {:exrm, "~> 1.0.0-rc7"}
+     {:exrm, "~> 1.0.0-rc7"},
+     {:quantum, ">= 1.7.1"}
     ]
   end
 
